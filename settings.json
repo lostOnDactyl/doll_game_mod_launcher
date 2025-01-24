@@ -1,0 +1,18 @@
+{
+    "general": {
+        "localization": "en"
+    },
+    "paths": {
+        "game_executable": "",
+        "migoto_executable": "",
+        "migoto_mod_folder": "",
+        "log_directory": "logs"
+    },
+    "user_preferences": {
+        "use_3dmigoto": false,
+        "toolbar_position": 2,
+        "style_dir": "styles",
+        "stylesheet": "",
+        "log_dir": "logs"
+    }
+}
