@@ -1,0 +1,21 @@
+QWidget {
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+QPushButton {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+QPushButton:hover {
+    background-color: #45a049;
+}
+
+QCheckBox {
+    margin: 5px;
+}

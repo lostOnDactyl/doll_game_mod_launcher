@@ -1,0 +1,26 @@
+{
+    "nav": {
+        "home": "Home",
+        "mods": "Mods",
+        "settings": "Settings",
+        "reload_all": "Reload",
+        "restore_all": "Restore"
+    },
+    "home": {
+        "button_launch_game": "Launch Game",
+        "label_options": "Options",
+        "option_use_3dmigoto": "Use 3DMigoto",
+        "default_message": "Dactyl's IDV 3DMigoto Mod Manager / Launcher"
+    },
+    "settings": {
+        "label_localization": "Localization",
+        "label_game_executable": "Game Executable",
+        "label_migoto_executable": "3DMigoto Executable",
+        "label_migoto_mod_folder": "3DMigoto Mod Folder",
+        "button_browse": "Browse",
+        "button_save": "Save",
+        "label_log_dir": "Log Directory",
+        "label_style_dir": "Style Directory",
+        "label_stylesheet": "Stylesheet"
+    }
+}

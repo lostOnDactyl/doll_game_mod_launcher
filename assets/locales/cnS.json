@@ -1,0 +1,26 @@
+{
+    "nav": {
+        "home": "主页",
+        "mods": "模组",
+        "settings": "设置",
+        "reload_all": "重载",
+        "restore_all": "恢复"
+    },
+    "home": {
+        "button_launch_game": "启动游戏",
+        "label_options": "选项",
+        "option_use_3dmigoto": "使用 3DMigoto",
+        "default_message": "Dactyl 的 IDV 3DMigoto 模组管理器 / 启动器"
+    },
+    "settings": {
+        "label_localization": "语言设置",
+        "label_game_executable": "游戏可执行文件",
+        "label_migoto_executable": "3DMigoto 可执行文件",
+        "label_migoto_mod_folder": "3DMigoto 模组文件夹",
+        "button_browse": "浏览",
+        "button_save": "保存",
+        "label_log_dir": "日志目录",
+        "label_style_dir": "样式目录",
+        "label_stylesheet": "样式表"
+    }
+}
