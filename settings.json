@@ -9,10 +9,14 @@
         "log_directory": "logs"
     },
     "user_preferences": {
-        "use_3dmigoto": false,
+        "use_3dmigoto": true,
         "toolbar_position": 2,
         "style_dir": "styles",
         "stylesheet": "",
-        "log_dir": "logs"
+        "log_dir": "logs",
+        "log": "debug"
+    },
+    "3dmigoto": {
+        "analyse_options": true
     }
 }

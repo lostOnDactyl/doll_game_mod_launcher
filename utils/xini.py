@@ -1,62 +1,74 @@
-# TODO im going to make a better way of dealing with this later
-# when youre not high you idito
+from PySide6.QtWidgets import QHBoxLayout
 
-import os
+def create_browse_row(input_field, browse_button):
+    """Create a layout with an input field and a browse button."""
+    row = QHBoxLayout()
+    row.addWidget(input_field)
+    row.addWidget(browse_button)
+    return row
 
-def toggle_mod_ini(mod_path, ini_name, enable):
-    """
-    Enable or disable a mod by renaming its .ini file to .Xini or back to .ini.
+from PySide6.QtWidgets import QFrame, QVBoxLayout, QGridLayout, QLabel, QCheckBox, QPushButton
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt
 
-    Args:
-        mod_path (str): Path to the mod folder.
-        ini_name (str): Name of the .ini file.
-        enable (bool): True to enable the mod, False to disable it.
-    """
-    if not os.path.isdir(mod_path):
-        print(f"Error: Mod path does not exist or is not a directory: {mod_path}")
-        return
+def create_mod_row(mod, enable_mapping, toggle_callback, expand_callback):
+    """Factory to create a mod row with its details."""
+    row = QFrame()
+    row_layout = QGridLayout(row)
+    row_layout.setContentsMargins(5, 5, 5, 5)
 
-    ini_path = os.path.join(mod_path, ini_name)
-    xini_path = os.path.join(mod_path, ini_name.replace(".ini", ".Xini"))
+    # Checkbox
+    checkbox = QCheckBox()
+    checkbox.setChecked(enable_mapping.get(mod["id"], False))  # Set initial state
+    checkbox.stateChanged.connect(lambda state, mod_id=mod["id"]: toggle_callback(mod_id, state))
+    row_layout.addWidget(checkbox, 0, 0, alignment=Qt.AlignCenter)
 
-    if enable:
-        # Enable the mod by ensuring it is named with .ini
-        if os.path.exists(xini_path):
-            os.rename(xini_path, ini_path)
-            print(f"Enabled mod: X{ini_name} -> {os.path.basename(ini_path)}")
-        else:
-            print(f"Enable operation skipped: .Xini file not found for {ini_name}")
-    else:
-        # Disable the mod by renaming it to .Xini
-        if os.path.exists(ini_path):
-            os.rename(ini_path, xini_path)
-            print(f"Disabled mod: {ini_name} -> {os.path.basename(xini_path)}")
-        else:
-            print(f"Disable operation skipped: .ini file not found for {ini_name}")
+    # Mod Details
+    mod_name = QLabel(mod["id"])
+    row_layout.addWidget(mod_name, 0, 1)
 
-def apply_enable_mapping(master_data, enable_mapping):
-    """
-    Apply the enable mapping to all mods in master.json.
+    # Display Type
+    mod_type = mod.get("type", "Unknown")
+    row_layout.addWidget(QLabel(mod_type), 0, 2)
 
-    :param master_data: The loaded master.json data.
-    :param enable_mapping: The enable mapping dict.
-    """
-    for mod_id, mod_data in master_data.items():
-        mod_path = mod_data.get("path")
-        ini_name = mod_data["data"].get("ini")
-        enable = enable_mapping.get(mod_id, False)
+    # Display Version
+    mod_version = mod["data"].get("version", "Unknown")
+    row_layout.addWidget(QLabel(mod_version), 0, 3)
 
-        toggle_mod_ini(mod_path, ini_name, enable)
+    # Expand/Collapse Button
+    expand_button = QPushButton()
+    expand_button.setIcon(QIcon(":/icons/triangle_down.png"))  # Replace with appropriate icon path
+    expand_button.setFixedSize(20, 20)
+    expand_button.clicked.connect(lambda: expand_callback(expand_button))
+    row_layout.addWidget(expand_button, 0, 4)
 
+    return row, expand_button
 
-def restore_all_inis(master_data):
-    """
-    Restore all mods to .ini (enabled state) by renaming .Xini back to .ini.
+def create_mod_details(mod):
+    """Factory to create detailed information for a mod."""
+    details = QFrame()
+    details.setStyleSheet("border: 1px solid #ccc; padding: 5px;")
+    details.setVisible(False)  # Initially hidden
+    details_layout = QVBoxLayout(details)
+    details_layout.setContentsMargins(10, 10, 10, 10)
 
-    :param master_data: The loaded master.json data.
-    """
-    for mod_id, mod_data in master_data.items():
-        mod_path = mod_data.get("path")
-        ini_name = mod_data["data"].get("ini")
+    # Path
+    mod_path = mod.get("path", "Unknown")
+    details_layout.addWidget(QLabel(f"Path: {mod_path}"))
 
-        toggle_mod_ini(mod_path, ini_name, True)  # Always enable
+    # Buffers
+    buffers = mod["data"].get("buffers", [])
+    details_layout.addWidget(QLabel(f"Buffers: {', '.join(buffers) if buffers else 'None'}"))
+
+    # Targets
+    targets = mod.get("targets", [])
+    if targets:
+        details_layout.addWidget(QLabel("Targets:"))
+        for target in targets:
+            char_or_obj = target.get("char") or target.get("object")
+            target_type = target.get("type", "Unknown")
+            target_note = target.get("note", "No note provided")
+            target_hash = target.get("hash", "Unknown")
+            details_layout.addWidget(QLabel(f"  - {target_type} ({char_or_obj}): {target_note} [{target_hash}]"))
+
+    return details

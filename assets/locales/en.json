@@ -22,5 +22,14 @@
         "label_log_dir": "Log Directory",
         "label_style_dir": "Style Directory",
         "label_stylesheet": "Stylesheet"
+    },
+    "dump": {
+        "select_script": "Select script:",
+        "ini_preview": "Generated INI Preview:",
+        "save_mode": "Save Mode:",
+        "generate": "Generate INI",
+        "save": "Send to dump.ini",
+        "append": "Append",
+        "override": "Override"
     }
 }

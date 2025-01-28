@@ -20,6 +20,9 @@ def load_settings():
             "style_dir": "styles",
             "stylesheet": ""
         },
+        "3dmigoto": {
+            "analyse_options": True
+        }
     }
     if os.path.exists(SETTINGS_FILE):
         try:
