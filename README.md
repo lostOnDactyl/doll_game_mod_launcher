@@ -4,7 +4,12 @@ VERY WIP made in about four hours. Will be going back and reworking most of it, 
 You can also contact me @deuil0002 on Discord
 
 
-**I RECOMMEND YOU BACK UP YOUR D3DX.INI BEFORE USING THIS**, since it will reformat it and it might be a little ugly. (This will be improved on soon!)
+## Known bugs / this version information
+These will all be fixed in the next version.
+
+**I RECOMMEND YOU BACK UP YOUR D3DX.INI BEFORE USING THIS**, since it will reformat it and it might be a little ugly.
+
+Also, once you first start the launcher, you right now have to toggle the mod at least once to be able to enable / disable it. (So turn it on and off if you want to disable a mod)
 
 ## Planned
 - Improvement of the 3DMigoto bind integration system w/ custom command lists
