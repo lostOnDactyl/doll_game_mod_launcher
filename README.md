@@ -3,11 +3,21 @@ VERY WIP made in about four hours. Will be going back and reworking most of it, 
 
 You can also contact me @deuil0002 on Discord
 
+
+## Known bugs / this version information
+These will all be fixed in the next version.
+
+**I RECOMMEND YOU BACK UP YOUR D3DX.INI BEFORE USING THIS**, since it will reformat it and it might be a little ugly.
+
+Also, once you first start the launcher, you right now have to toggle the mod at least once to be able to enable / disable it. (So turn it on and off if you want to disable a mod)
+
 ## Planned
-- Better 3DMigoto integration (keybind support)
-- Customizable toggles for mods through the launcher
-- Display hash conflicts
-- Make mods page less hideous and more functional (maybe at some point add thumbnails but that's a stretch)
+- Improvement of the 3DMigoto bind integration system w/ custom command lists
+- Will provide an option to download GIMI and fetch a default .ini configured for Identity V
+- Reorganization (seperate source from user specifications -- so eventually I can have an auto update button)
+- Hash conflict manager
+- Better modding / file type utils
+- Integration w/ a Blender plugin
 
 # Installation Instructions
 These are instructions for Windows, since it is what most people are running Identity V on. Python is required, I am on 3.13. You can find better tutorials for installing that than I could write.

@@ -1,10 +1,14 @@
 import json
 import os
 
+# Paths and directory references
+ASSETS_DIR = "assets"
+LOCALES_DIR = os.path.join(ASSETS_DIR, "locales")
+
 class Localization:
     def __init__(self, language="en"):
         self.language = language
-        self.assets_dir = os.path.join("assets", "locales") 
+        self.assets_dir = LOCALES_DIR
         self.translations = self.load_language(language)
 
     def load_language(self, language):

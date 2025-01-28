@@ -1,19 +1,19 @@
 {
     "nav": {
-        "home": "主页",
+        "home": "首页",
         "mods": "模组",
         "settings": "设置",
         "reload_all": "重载",
-        "restore_all": "恢复"
+        "restore_all": "还原"
     },
     "home": {
         "button_launch_game": "启动游戏",
         "label_options": "选项",
         "option_use_3dmigoto": "使用 3DMigoto",
-        "default_message": "Dactyl 的 IDV 3DMigoto 模组管理器 / 启动器"
+        "default_message": "Dactyl 的 IDV 3DMigoto 模组管理器/启动器"
     },
     "settings": {
-        "label_localization": "语言设置",
+        "label_localization": "本地化",
         "label_game_executable": "游戏可执行文件",
         "label_migoto_executable": "3DMigoto 可执行文件",
         "label_migoto_mod_folder": "3DMigoto 模组文件夹",
@@ -22,5 +22,14 @@
         "label_log_dir": "日志目录",
         "label_style_dir": "样式目录",
         "label_stylesheet": "样式表"
+    },
+    "dump": {
+        "select_script": "选择脚本：",
+        "ini_preview": "生成的 INI 预览：",
+        "save_mode": "保存模式：",
+        "generate": "生成 INI",
+        "save": "发送到 dump.ini",
+        "append": "追加",
+        "override": "覆盖"
     }
 }

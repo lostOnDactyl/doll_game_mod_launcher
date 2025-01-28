@@ -1,6 +1,7 @@
 import sys
 import os
 import importlib
+import winreg
 from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QPushButton, QStackedWidget, QToolBar, QWidget
 from PySide6.QtCore import Qt
 from localization import Localization
@@ -8,6 +9,22 @@ from utils.load_mods.DIRECTORY import load_directory
 from utils.file_utils import load_json
 from utils.xini import toggle_mod_ini
 from utils.settings import load_settings, save_settings, load_enable_mapping, save_enable_mapping
+
+def is_dark_mode_enabled():
+    """Check if Windows dark mode is enabled."""
+    try:
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize") as key:
+            apps_use_light_theme, _ = winreg.QueryValueEx(key, "AppsUseLightTheme")
+            return apps_use_light_theme == 0  # 0 means dark mode is enabled
+    except FileNotFoundError:
+        # Default to light mode if registry key doesn't exist
+        return False
+
+# Paths and directory references
+PAGES_DIR = "pages"
+CONFIG_MODS_DIR = os.path.join(os.path.dirname(__file__), "config", "mods")
+MASTER_FILE = os.path.join(CONFIG_MODS_DIR, "master.json")
+MIGOTO_MOD_FOLDER_KEY = "migoto_mod_folder"
 
 # Factories
 def create_nav_button(name, callback, localization):
@@ -34,6 +51,9 @@ class Launcher(QMainWindow):
         # Load settings and localization
         self.settings = load_settings()
         self.localization = Localization(self.settings["general"].get("localization", "en"))
+
+        # Load stylesheet if specified in settings
+        self.load_stylesheet()
 
         self.toolbar = QToolBar(self.localization.get("nav.toolbar", "Main Toolbar"))
         toolbar_position = Qt.ToolBarArea(self.settings["user_preferences"]["toolbar_position"])
@@ -65,6 +85,19 @@ class Launcher(QMainWindow):
         self.aggregate_mods()
         self.apply_mod_states()
 
+    def load_stylesheet(self):
+        """Load the stylesheet from settings if specified."""
+        stylesheet_path = self.settings["user_preferences"].get("stylesheet")
+        if stylesheet_path and os.path.isfile(stylesheet_path):
+            stylesheet = read_qss_stylesheet(stylesheet_path)
+            if stylesheet:
+                self.setStyleSheet(stylesheet)
+                print(f"Loaded stylesheet from: {stylesheet_path}")
+            else:
+                print(f"Failed to load stylesheet from: {stylesheet_path}")
+        else:
+            print("No valid stylesheet path found in settings.")
+
     def closeEvent(self, event):
         """Handle application close, save settings, and restore all mods."""
         self.settings["user_preferences"]["toolbar_position"] = self.toolBarArea(self.toolbar).value
@@ -81,10 +114,9 @@ class Launcher(QMainWindow):
     def load_pages(self):
         """Dynamically load pages from the `pages` directory."""
         page_map = {}
-        pages_dir = "pages"
-        for file in os.listdir(pages_dir):
+        for file in os.listdir(PAGES_DIR):
             if file.endswith(".py") and file not in ["__init__.py", "base.py"]:
-                module_name = f"pages.{file[:-3]}"
+                module_name = f"{PAGES_DIR}.{file[:-3]}"
                 try:
                     module = importlib.import_module(module_name)
                     page_class_name = file[:-3].capitalize() + "Page"
@@ -105,20 +137,18 @@ class Launcher(QMainWindow):
 
     def aggregate_mods(self):
         """Run the mod aggregation process."""
-        mod_directory = self.settings["paths"]["migoto_mod_folder"]
-        config_mods_dir = os.path.join(os.path.dirname(__file__), "config", "mods")
-        master_file = os.path.join(config_mods_dir, "master.json")
+        mod_directory = self.settings["paths"][MIGOTO_MOD_FOLDER_KEY]
 
         try:
-            os.makedirs(config_mods_dir, exist_ok=True)
-            load_directory(mod_directory, master_file)
-            print(f"Mod aggregation completed. Master file created at {master_file}.")
+            os.makedirs(CONFIG_MODS_DIR, exist_ok=True)
+            load_directory(mod_directory, MASTER_FILE)
+            print(f"Mod aggregation completed. Master file created at {MASTER_FILE}.")
         except Exception as e:
             print(f"Error during mod aggregation: {e}")
 
     def apply_mod_states(self):
         """Apply the enable/disable states to mods based on enable_mapping."""
-        master_data = load_json("./config/mods/master.json")
+        master_data = load_json(MASTER_FILE)
         for mod_id, enabled in self.enable_mapping.items():
             mod_data = master_data.get(mod_id)
             if not mod_data:
@@ -140,7 +170,7 @@ class Launcher(QMainWindow):
 
     def restore_all_mods(self):
         """Restore all mods in the Mods directory."""
-        mods_dir = self.settings["paths"].get("migoto_mod_folder", "")
+        mods_dir = self.settings["paths"].get(MIGOTO_MOD_FOLDER_KEY, "")
         if not os.path.isdir(mods_dir):
             print(self.localization.get("nav.error_mod_directory", f"Error: Mods directory does not exist: {mods_dir}").format(directory=mods_dir))
             return
@@ -185,8 +215,26 @@ class Launcher(QMainWindow):
 
         print("Launcher settings, localization, and mods reloaded.")
 
+def read_qss_stylesheet(file_path):
+    """
+    Reads a .qss stylesheet file and returns its content as a string.
+
+    :param file_path: Path to the .qss file.
+    :return: The content of the .qss file as a string.
+    """
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return file.read()
+    except FileNotFoundError:
+        print(f"Error: The file '{file_path}' was not found.")
+        return ""
+    except Exception as e:
+        print(f"An error occurred while reading the file: {e}")
+        return ""
+    
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+
     launcher = Launcher()
     launcher.show()
     sys.exit(app.exec())
